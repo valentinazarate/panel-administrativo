@@ -1,0 +1,19 @@
+<header class="flex items-center justify-between bg-white px-4 py-3 shadow-sm md:px-8 border-b border-crema-oscuro">
+  <a routerLink="/catalogo" class="flex items-center gap-2">
+    <img src="Logo monograma.png" alt="Sin Gluten & Punto" class="h-10 w-10" />
+    <span class="font-semibold text-lg hidden sm:block text-verde-oscuro">Sin Gluten & Punto</span>
+  </a>
+
+  <nav class="flex items-center gap-4">
+    <a routerLink="/catalogo" class="text-sm font-medium text-verde-oscuro hover:text-verde">Catálogo</a>
+    <a routerLink="/carrito" class="relative flex items-center gap-1 text-sm font-medium text-verde-oscuro hover:text-verde">
+      <i class="pi pi-shopping-cart"></i>
+      <span class="hidden sm:inline">Carrito</span>
+      @if (carritoService.cantidadTotal() > 0) {
+        <span class="absolute -top-2 -right-2 sm:static sm:ml-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          {{ carritoService.cantidadTotal() }}
+        </span>
+      }
+    </a>
+  </nav>
+</header>

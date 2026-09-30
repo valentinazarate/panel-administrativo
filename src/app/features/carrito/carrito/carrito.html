@@ -1,0 +1,50 @@
+<div class="max-w-3xl mx-auto flex flex-col gap-4">
+  <h1 class="text-2xl font-semibold text-verde-oscuro">Tu carrito</h1>
+
+  @if (carritoService.itemsCarrito().length === 0) {
+    <div class="text-center py-12 bg-white rounded-lg border border-crema-oscuro">
+      <p class="text-gray-500 mb-3">Todavía no agregaste productos.</p>
+      <a routerLink="/catalogo" class="text-verde hover:underline">Ir al catálogo</a>
+    </div>
+  } @else {
+    <div class="flex flex-col gap-3">
+      @for (item of carritoService.itemsCarrito(); track item.producto.id) {
+        <div class="flex items-center gap-4 bg-white rounded-lg border border-crema-oscuro p-3">
+          <div class="w-20 h-20 shrink-0 overflow-hidden rounded bg-crema">
+            <img [src]="'/productos/' + item.producto.slug + '.jpg'" [alt]="item.producto.nombre" ...>
+          </div>
+
+          <div class="flex-1 flex flex-col gap-1">
+            <span class="font-medium text-verde-oscuro">{{ item.producto.nombre }}</span>
+            <span class="text-sm text-gray-500">{{ +item.producto.precio_venta | currency:'ARS' }} c/u</span>
+          </div>
+
+          <p-inputnumber
+            [ngModel]="item.cantidad"
+            (ngModelChange)="cambiarCantidad(item.producto.id, $event)"
+            [min]="1"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            [style]="{ width: '8rem' }"
+          />
+
+          <span class="font-semibold text-verde w-24 text-right">
+            {{ +item.producto.precio_venta * item.cantidad | currency:'ARS' }}
+          </span>
+
+          <button (click)="eliminar(item.producto.id)" class="text-red-500 hover:text-red-700">
+            <i class="pi pi-trash"></i>
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="flex justify-between items-center bg-white rounded-lg border border-crema-oscuro p-4 mt-2">
+      <span class="text-lg font-semibold text-verde-oscuro">Total</span>
+      <span class="text-2xl font-bold text-verde">{{ carritoService.totalPrecio() | currency:'ARS' }}</span>
+    </div>
+
+    <p-button label="Finalizar compra" icon="pi pi-check" class="self-end mt-2" />
+  }
+</div>

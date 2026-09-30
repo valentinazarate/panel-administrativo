@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+
+
+@theme {
+  --color-crema: #F0EAD6;
+  --color-crema-oscuro: #E3DAC0;
+  --color-verde: #2F6B4F;
+  --color-verde-oscuro: #1F4A36;
+}
+/* Oculta el watermark de licencia (bug de PrimeNG) */
+#p-license-host {
+  display: none !important;
+}

@@ -1,0 +1,54 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visibleChange.emit($event)"
+  [modal]="true"
+  header="Producto"
+  [style]="{ width: '30rem' }"
+>
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="nombre">Nombre</label>
+      <input id="nombre" pInputText formControlName="nombre" />
+      @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+        <span class="text-xs text-red-500">
+          @if (form.get('nombre')?.errors?.['required']) {
+            El nombre es obligatorio.
+          } @else if (form.get('nombre')?.errors?.['minlength']) {
+            Mínimo 3 caracteres.
+          }
+        </span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" pTextarea formControlName="descripcion" rows="3"></textarea>
+      @if (form.get('descripcion')?.invalid && form.get('descripcion')?.touched) {
+        <span class="text-xs text-red-500">La descripción es obligatoria.</span>
+      }
+    </div>
+
+    <div class="flex gap-4">
+      <div class="flex flex-1 flex-col gap-1">
+        <label for="precio">Precio</label>
+        <p-inputnumber id="precio" formControlName="precio" mode="currency" currency="ARS" locale="es-AR" />
+        @if (form.get('precio')?.invalid && form.get('precio')?.touched) {
+          <span class="text-xs text-red-500">El precio debe ser mayor a 0.</span>
+        }
+      </div>
+
+      <div class="flex flex-1 flex-col gap-1">
+        <label for="stock">Stock</label>
+        <p-inputnumber id="stock" formControlName="stock" [min]="0" />
+        @if (form.get('stock')?.invalid && form.get('stock')?.touched) {
+          <span class="text-xs text-red-500">El stock no puede ser negativo.</span>
+        }
+      </div>
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="onCancelar()" />
+    <p-button label="Guardar" (onClick)="onGuardar()" />
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,26 @@
+<aside
+  class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-white shadow-md transition-transform duration-200"
+  [class.translate-x-0]="layout.sidebarOpen()"
+>
+  <nav class="flex flex-col gap-1 p-4">
+    <a routerLink="/admin/categorias" routerLinkActive="bg-primary-50 text-primary-700 font-semibold" (click)="layout.closeSidebar()" class="flex items-center gap-2 rounded px-3 py-2 hover:bg-gray-100">
+      <i class="pi pi-tags"></i>
+      <span>Categorías</span>
+    </a>
+    <a routerLink="/admin/marcas" routerLinkActive="bg-primary-50 text-primary-700 font-semibold" (click)="layout.closeSidebar()" class="flex items-center gap-2 rounded px-3 py-2 hover:bg-gray-100">
+      <i class="pi pi-bookmark"></i>
+      <span>Marcas</span>
+    </a>
+    <a routerLink="/admin/productos" routerLinkActive="bg-primary-50 text-primary-700 font-semibold" (click)="layout.closeSidebar()" class="flex items-center gap-2 rounded px-3 py-2 hover:bg-gray-100">
+      <i class="pi pi-box"></i>
+      <span>Productos</span>
+    </a>
+  </nav>
+</aside>
+
+@if (layout.sidebarOpen()) {
+  <div
+    class="fixed inset-0 z-30 bg-black/40"
+    (click)="layout.closeSidebar()"
+  ></div>
+}

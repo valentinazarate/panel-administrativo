@@ -1,0 +1,26 @@
+<header class="grid grid-cols-3 items-center bg-white px-4 py-3 shadow-sm">
+  <!-- Columna 1 (Izquierda): Botón Hamburguesa -->
+  <div class="flex items-center">
+    <button type="button" (click)="layout.toggleSidebar()" class="p-1 rounded-md hover:bg-slate-100 transition-colors">
+      <i class="pi pi-bars text-xl"></i>
+    </button>
+    <img src="Logo monograma.png" alt="Logo" class="h-8 ml-3" />
+  </div>
+
+  <!-- Columna 2 (Centro): Título -->
+  <div class="text-center">
+    <h1 class="font-semibold text-lg text-gray-800">Panel Administrativo</h1>
+  </div>
+
+  <!-- Columna 3 (Derecha): Perfil del Usuario -->
+  <div class="flex items-center justify-end">
+    <div class="flex items-center gap-2 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-colors" 
+         (click)="toggleMenu($event)">
+      <span class="hidden sm:block text-sm font-medium text-gray-700">Valentina</span>
+      <p-avatar label="V" shape="circle" style="background-color: #2F6B4F; color: white" />
+    </div>
+
+    <!-- Menú desplegable alineado dinámicamente -->
+    <p-menu #menu [model]="menuItems" [popup]="true" appendTo="body" />
+  </div>
+</header>

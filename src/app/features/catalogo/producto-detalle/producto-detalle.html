@@ -1,0 +1,26 @@
+@if (producto) {
+  <div class="flex flex-col gap-6 md:flex-row bg-white rounded-lg shadow-sm p-6 border border-crema-oscuro">
+    <div class="md:w-1/2">
+      <div class="aspect-square w-full overflow-hidden rounded-lg bg-crema">
+        <img [src]="'/productos/' + producto.slug + '.jpg'" [alt]="producto.nombre" class="w-full h-full object-cover" />
+      </div>
+    </div>
+
+    <div class="md:w-1/2 flex flex-col gap-3">
+      <a routerLink="/catalogo" class="text-sm text-verde hover:underline">← Volver al catálogo</a>
+
+      <span class="text-sm text-gray-500">{{ producto.marca.nombre }} · {{ producto.categoria.nombre }}</span>
+      <h1 class="text-2xl font-semibold text-verde-oscuro">{{ producto.nombre }}</h1>
+      <span class="text-2xl font-bold text-verde">{{ +producto.precio_venta | currency:'ARS' }}</span>
+
+      <p class="text-gray-600">{{ producto.descripcion_larga }}</p>
+
+      <p-button label="Agregar al carrito" icon="pi pi-shopping-cart" (onClick)="agregarAlCarrito()" class="mt-4 w-fit" />
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-12">
+    <p class="text-gray-500">Producto no encontrado.</p>
+    <a routerLink="/catalogo" class="text-verde hover:underline">Volver al catálogo</a>
+  </div>
+}
