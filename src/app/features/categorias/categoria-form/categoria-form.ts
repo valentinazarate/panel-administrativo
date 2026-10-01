@@ -4,12 +4,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Button } from 'primeng/button';
-
-export interface Categoria {
-  id: number;
-  nombre: string;
-  descripcion: string;
-}
+import { Categoria } from '../../../shared/services/categorias';
 
 @Component({
   selector: 'app-categoria-form',
@@ -35,7 +30,7 @@ export class CategoriaForm {
     effect(() => {
       this.form.patchValue({
         nombre: this.categoria().nombre,
-        descripcion: this.categoria().descripcion,
+        descripcion: this.categoria().descripcion ?? '',
       });
     });
   }
@@ -47,7 +42,7 @@ export class CategoriaForm {
     }
 
     this.guardar.emit({
-      id: this.categoria().id,
+      ...this.categoria(),
       nombre: this.form.value.nombre!,
       descripcion: this.form.value.descripcion!,
     });

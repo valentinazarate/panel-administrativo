@@ -1,7 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Table } from 'primeng/table';
 import { Button } from 'primeng/button';
-import { MarcaForm, Marca } from '../marca-form/marca-form';
+import { MarcaForm } from '../marca-form/marca-form';
+import { Marcas, Marca } from '../../../shared/services/marcas';
+
+const MARCA_VACIA: Marca = { id: 0, nombre: '', slug: '', descripcion: '', logo: null, activo: true };
 
 @Component({
   selector: 'app-marcas-list',
@@ -10,16 +13,19 @@ import { MarcaForm, Marca } from '../marca-form/marca-form';
   templateUrl: './marcas-list.html'
 })
 export class MarcasList {
-  marcas = signal<Marca[]>([
-    { id: 1, nombre: 'Sin Gluten & Punto', descripcion: 'Marca propia de la tienda' },
-    { id: 2, nombre: 'NaturFit', descripcion: 'Productos orgánicos importados' },
-  ]);
+  private marcasService = inject(Marcas);
+
+  marcas = signal<Marca[]>([]);
 
   dialogVisible = signal(false);
-  marcaSeleccionada = signal<Marca>({ id: 0, nombre: '', descripcion: '' });
+  marcaSeleccionada = signal<Marca>(MARCA_VACIA);
+
+  ngOnInit(): void {
+    this.marcasService.obtenerMarcas().subscribe(data => this.marcas.set(data));
+  }
 
   abrirNueva(): void {
-    this.marcaSeleccionada.set({ id: 0, nombre: '', descripcion: '' });
+    this.marcaSeleccionada.set({ ...MARCA_VACIA });
     this.dialogVisible.set(true);
   }
 
@@ -30,17 +36,22 @@ export class MarcasList {
 
   guardar(marca: Marca): void {
     if (marca.id === 0) {
-      const nuevoId = Math.max(0, ...this.marcas().map(m => m.id)) + 1;
-      this.marcas.update(lista => [...lista, { ...marca, id: nuevoId }]);
+      this.marcasService.crear(marca).subscribe(nueva => {
+        this.marcas.update(lista => [...lista, nueva]);
+      });
     } else {
-      this.marcas.update(lista =>
-        lista.map(m => (m.id === marca.id ? marca : m))
-      );
+      this.marcasService.actualizar(marca.id, marca).subscribe(actualizada => {
+        this.marcas.update(lista =>
+          lista.map(m => (m.id === marca.id ? actualizada : m))
+        );
+      });
     }
     this.dialogVisible.set(false);
   }
 
   eliminar(marca: Marca): void {
-    this.marcas.update(lista => lista.filter(m => m.id !== marca.id));
+    this.marcasService.eliminar(marca.id).subscribe(() => {
+      this.marcas.update(lista => lista.filter(m => m.id !== marca.id));
+    });
   }
 }

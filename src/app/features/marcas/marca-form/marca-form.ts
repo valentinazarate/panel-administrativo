@@ -4,12 +4,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Button } from 'primeng/button';
-
-export interface Marca {
-  id: number;
-  nombre: string;
-  descripcion: string;
-}
+import { Marca } from '../../../shared/services/marcas';
 
 @Component({
   selector: 'app-marca-form',
@@ -35,7 +30,7 @@ export class MarcaForm {
     effect(() => {
       this.form.patchValue({
         nombre: this.marca().nombre,
-        descripcion: this.marca().descripcion,
+        descripcion: this.marca().descripcion ?? '',
       });
     });
   }
@@ -47,7 +42,7 @@ export class MarcaForm {
     }
 
     this.guardar.emit({
-      id: this.marca().id,
+      ...this.marca(),
       nombre: this.form.value.nombre!,
       descripcion: this.form.value.descripcion!,
     });

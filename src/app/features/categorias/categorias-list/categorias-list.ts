@@ -1,7 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Table } from 'primeng/table';
 import { Button } from 'primeng/button';
-import { CategoriaForm, Categoria } from '../categoria-form/categoria-form';
+import { CategoriaForm } from '../categoria-form/categoria-form';
+import { Categorias, Categoria } from '../../../shared/services/categorias';
+
+const CATEGORIA_VACIA: Categoria = { id: 0, nombre: '', slug: '', descripcion: '' };
 
 @Component({
   selector: 'app-categorias-list',
@@ -10,17 +13,19 @@ import { CategoriaForm, Categoria } from '../categoria-form/categoria-form';
   templateUrl: './categorias-list.html'
 })
 export class CategoriasList {
-  categorias = signal<Categoria[]>([
-    { id: 1, nombre: 'Harinas', descripcion: 'Harinas sin gluten: arroz, avena, almendra, garbanzo' },
-    { id: 2, nombre: 'Semillas', descripcion: 'Semillas y derivados' },
-    { id: 3, nombre: 'Recetas', descripcion: 'Preparaciones a base de harinas sin gluten' },
-  ]);
+  private categoriasService = inject(Categorias);
+
+  categorias = signal<Categoria[]>([]);
 
   dialogVisible = signal(false);
-  categoriaSeleccionada = signal<Categoria>({ id: 0, nombre: '', descripcion: '' });
+  categoriaSeleccionada = signal<Categoria>(CATEGORIA_VACIA);
+
+  ngOnInit(): void {
+    this.categoriasService.obtenerCategorias().subscribe(data => this.categorias.set(data));
+  }
 
   abrirNueva(): void {
-    this.categoriaSeleccionada.set({ id: 0, nombre: '', descripcion: '' });
+    this.categoriaSeleccionada.set({ ...CATEGORIA_VACIA });
     this.dialogVisible.set(true);
   }
 
@@ -31,17 +36,22 @@ export class CategoriasList {
 
   guardar(categoria: Categoria): void {
     if (categoria.id === 0) {
-      const nuevoId = Math.max(0, ...this.categorias().map(c => c.id)) + 1;
-      this.categorias.update(lista => [...lista, { ...categoria, id: nuevoId }]);
+      this.categoriasService.crear(categoria).subscribe(nueva => {
+        this.categorias.update(lista => [...lista, nueva]);
+      });
     } else {
-      this.categorias.update(lista =>
-        lista.map(c => (c.id === categoria.id ? categoria : c))
-      );
+      this.categoriasService.actualizar(categoria.id, categoria).subscribe(actualizada => {
+        this.categorias.update(lista =>
+          lista.map(c => (c.id === categoria.id ? actualizada : c))
+        );
+      });
     }
     this.dialogVisible.set(false);
   }
 
   eliminar(categoria: Categoria): void {
-    this.categorias.update(lista => lista.filter(c => c.id !== categoria.id));
+    this.categoriasService.eliminar(categoria.id).subscribe(() => {
+      this.categorias.update(lista => lista.filter(c => c.id !== categoria.id));
+    });
   }
 }
