@@ -64,19 +64,24 @@ export class ProductosList {
     this.dialogVisible.set(true);
   }
 
-  guardar(producto: Producto): void {
-    if (producto.id === 0) {
-      const nuevoId = Math.max(0, ...this.productos().map(p => p.id)) + 1;
-      this.productos.update(lista => [...lista, { ...producto, id: nuevoId }]);
-    } else {
+   guardar(producto: Producto): void {
+  if (producto.id === 0) {
+    this.productosService.crear(producto).subscribe(respuesta => {
+      this.productos.update(lista => [...lista, respuesta.data]);
+    });
+  } else {
+    this.productosService.actualizar(producto.id, producto).subscribe(actualizado => {
       this.productos.update(lista =>
-        lista.map(p => (p.id === producto.id ? producto : p))
+        lista.map(p => (p.id === producto.id ? actualizado : p))
       );
-    }
-    this.dialogVisible.set(false);
+    });
   }
-
-  eliminar(producto: Producto): void {
-    this.productos.update(lista => lista.filter(p => p.id !== producto.id));
-  }
+  this.dialogVisible.set(false);
 }
+
+   eliminar(producto: Producto): void {
+    this.productosService.eliminar(producto.id).subscribe(() => {
+      this.productos.update(lista => lista.filter(p => p.id !== producto.id));
+    });
+  }
+} 

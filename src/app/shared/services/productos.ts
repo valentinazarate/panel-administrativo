@@ -60,4 +60,18 @@ export class Productos {
   obtenerProductos() {
     return this.http.get<Producto[]>(this.API_PRODUCTOS);
   }
+
+  crear(producto: Partial<Producto>) {
+  return this.http.post<{ message: string; data: Producto }>(this.API_PRODUCTOS, producto);
+}
+
+  actualizar(id: number, producto: Partial<Producto>) {
+    return this.http.put<Producto>(`${this.API_PRODUCTOS}/${id}`, producto);
+  }
+
+  eliminar(id: number) {
+    return this.http.delete<void>(`${this.API_PRODUCTOS}/${id}`);
+  }
+
+
 }

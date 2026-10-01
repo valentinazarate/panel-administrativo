@@ -45,6 +45,57 @@
         }
       </div>
     </div>
+
+    <div class="flex gap-4">
+      <div class="flex flex-1 flex-col gap-1">
+        <label for="marca">Marca</label>
+        <p-select
+          id="marca"
+          formControlName="marca_id"
+          [options]="marcas()"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccionar marca"
+        />
+        @if (form.get('marca_id')?.invalid && form.get('marca_id')?.touched) {
+          <span class="text-xs text-red-500">La marca es obligatoria.</span>
+        }
+      </div>
+
+      <div class="flex flex-1 flex-col gap-1">
+        <label for="categoria">Categoría</label>
+        <p-select
+          id="categoria"
+          formControlName="categoria_id"
+          [options]="categorias()"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccionar categoría"
+        />
+        @if (form.get('categoria_id')?.invalid && form.get('categoria_id')?.touched) {
+          <span class="text-xs text-red-500">La categoría es obligatoria.</span>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="unidad">Unidad de medida</label>
+      <p-select
+        id="unidad"
+        formControlName="unidad_medida"
+        [options]="[
+          { label: 'Kilogramos (kg)', value: 'kg' },
+          { label: 'Gramos (g)', value: 'g' },
+          { label: 'Litros (l)', value: 'l' }
+        ]"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Seleccionar unidad"
+      />
+      @if (form.get('unidad_medida')?.invalid && form.get('unidad_medida')?.touched) {
+        <span class="text-xs text-red-500">La unidad de medida es obligatoria.</span>
+      }
+    </div>
   </form>
 
   <ng-template #footer>

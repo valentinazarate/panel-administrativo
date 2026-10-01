@@ -16,7 +16,7 @@
   <ng-template #body let-producto>
     <tr>
       <td>{{ producto.nombre }}</td>
-      <td>{{ producto.precio | currency:'ARS' }}</td>
+      <td>{{ +producto.precio_venta| currency:'ARS' }}</td>
       <td>{{ producto.stock }}</td>
       <td>
         <div class="flex gap-2">
