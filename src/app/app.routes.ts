@@ -17,6 +17,7 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     children: [
+      { path: '', redirectTo: 'productos', pathMatch: 'full' },
       { path: 'categorias', loadComponent: () => import('./features/categorias/categorias-list/categorias-list').then(m => m.CategoriasList) },
       { path: 'marcas', loadComponent: () => import('./features/marcas/marcas-list/marcas-list').then(m => m.MarcasList) },
       { path: 'productos', loadComponent: () => import('./features/productos/productos-list/productos-list').then(m => m.ProductosList) },
