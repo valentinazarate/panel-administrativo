@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
@@ -37,6 +38,7 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: false
         }
       }
-    })
+    }),
+    MessageService
   ]
 };
