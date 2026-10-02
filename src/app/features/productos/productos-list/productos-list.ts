@@ -26,7 +26,7 @@ const PRODUCTO_VACIO: Producto = {
   created_at: '',
   updated_at: '',
   marca: { id: 0, nombre: '', slug: '', descripcion: null, logo: null, activo: true },
-  categoria: { id: 0, nombre: '', slug: '' },
+  categoria: { id: 0, nombre: '', slug: '', descripcion: null },
 };
 
 @Component({
