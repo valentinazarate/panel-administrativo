@@ -83,11 +83,7 @@
       <p-select
         id="unidad"
         formControlName="unidad_medida"
-        [options]="[
-          { label: 'Kilogramos (kg)', value: 'kg' },
-          { label: 'Gramos (g)', value: 'g' },
-          { label: 'Litros (l)', value: 'l' }
-        ]"
+        [options]="unidadesMedida"
         optionLabel="label"
         optionValue="value"
         placeholder="Seleccionar unidad"

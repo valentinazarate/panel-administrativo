@@ -66,41 +66,35 @@ export class ProductosList {
     this.dialogVisible.set(true);
   }
 
-  guardar(producto: Producto): void {
-    if (producto.id === 0) {
-      this.productosService.crear(producto).subscribe({
-        next: respuesta => {
-          this.productos.update(lista => [...lista, respuesta.data]);
-          this.dialogVisible.set(false);
-          this.messageService.add({ severity: 'success', summary: 'Producto creado', detail: `"${respuesta.data.nombre}" se guardó correctamente.` });
-        },
-        error: err => this.mostrarErrorGuardado(err),
-      });
-    } else {
-      this.productosService.actualizar(producto.id, producto).subscribe({
-        next: actualizado => {
-          this.productos.update(lista =>
-            lista.map(p => (p.id === producto.id ? actualizado : p))
-          );
-          this.dialogVisible.set(false);
-          this.messageService.add({ severity: 'success', summary: 'Producto actualizado', detail: `"${actualizado.nombre}" se actualizó correctamente.` });
-        },
-        error: err => this.mostrarErrorGuardado(err),
-      });
-    }
-  }
+  errorMensaje = signal<string | null>(null);
 
-  eliminar(producto: Producto): void {
-    this.productosService.eliminar(producto.id).subscribe({
-      next: () => {
-        this.productos.update(lista => lista.filter(p => p.id !== producto.id));
-        this.messageService.add({ severity: 'success', summary: 'Producto eliminado', detail: `"${producto.nombre}" se eliminó correctamente.` });
-      },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Error al eliminar', detail: 'No se pudo eliminar el producto. Intentá de nuevo.' });
-      },
-    });
-  }
+guardar(producto: Producto): void {
+  const peticion = producto.id === 0
+    ? this.productosService.crearProducto(producto)
+    : this.productosService.actualizarProducto(producto.id, producto);
+
+  peticion.subscribe({
+    next: () => {
+      this.errorMensaje.set(null);
+      this.dialogVisible.set(false);
+      this.obtenerProductos();
+    },
+    error: (err) => {
+      this.errorMensaje.set(
+        err.status === 422
+          ? 'Hay datos inválidos. Revisá los campos.'
+          : 'No se pudo guardar. Intentá de nuevo.'
+      );
+    }
+  });
+}
+
+eliminar(producto: Producto): void {
+  this.productosService.eliminarProducto(producto.id).subscribe({
+    next: () => this.obtenerProductos(),
+    error: () => this.errorMensaje.set('No se pudo eliminar el producto.')
+  });
+}
 
   private mostrarErrorGuardado(err: any): void {
     const detalle = err?.error?.message ?? 'Revisá los datos ingresados e intentá de nuevo.';

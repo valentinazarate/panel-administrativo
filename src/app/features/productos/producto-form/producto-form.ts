@@ -29,6 +29,13 @@ export class ProductoForm {
 
   marcas = signal<Marca[]>([]);
   categorias = signal<Categoria[]>([]);
+  unidadesMedida = [
+    { label: 'Kilogramos (kg)', value: 'kg' },
+    { label: 'Gramos (g)', value: 'g' },
+    { label: 'Litros (l)', value: 'l' },
+  ];
+
+  
 
   form = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],

@@ -3,6 +3,10 @@
   <p-button label="Nuevo producto" icon="pi pi-plus" (onClick)="abrirNuevo()" />
 </div>
 
+@if (errorMensaje()) {
+  <p class="text-red-500 text-sm mb-3">{{ errorMensaje() }}</p>
+}
+
 <p-table [value]="productos()" [tableStyle]="{ 'min-width': '40rem' }">
   <ng-template #header>
     <tr>
